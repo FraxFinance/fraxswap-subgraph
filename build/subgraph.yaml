@@ -8,6 +8,7 @@ dataSources:
     source:
       address: "0xB076b06F669e682609fb4a8C6646D2619717Be4b"
       abi: FraxswapFactory
+      startBlock: 14775229
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
