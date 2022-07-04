@@ -1,6 +1,6 @@
 specVersion: 0.0.4
 schema:
-  file: ./schema.graphql
+  file: schema.graphql
 dataSources:
   - kind: ethereum
     name: FraxswapFactory
@@ -16,8 +16,8 @@ dataSources:
         - PairCreated
       abis:
         - name: FraxswapFactory
-          file: ./abis/FraxswapFactory.json
+          file: FraxswapFactory/abis/FraxswapFactory.json
       eventHandlers:
         - event: PairCreated(indexed address,indexed address,address,uint256)
           handler: handlePairCreated
-      file: ./src/fraxswap-factory.ts
+      file: FraxswapFactory/FraxswapFactory.wasm
