@@ -1,13 +1,24 @@
 {
   "name": "fraxswap-subgraph",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "subgraphs/*"
+  ],
   "license": "UNLICENSED",
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
+    "build-yarn": "yarn workspaces run build",
+    "codegen-yarn": "yarn workspaces run codegen",
     "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ fraxswap-subgraph",
     "create-local": "graph create --node http://localhost:8020/ fraxswap-subgraph",
     "remove-local": "graph remove --node http://localhost:8020/ fraxswap-subgraph",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 fraxswap-subgraph"
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 fraxswap-subgraph",
+    "prepare:bsc": "yarn workspaces run prepare:bsc",
+    "prepare:fantom": "yarn workspaces run prepare:fantom",
+    "prepare:mainnet": "yarn workspaces run prepare:mainnet",
+    "prepare:matic": "yarn workspaces run prepare:matic"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "0.32.0",

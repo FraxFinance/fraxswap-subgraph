@@ -22,7 +22,7 @@ import {
   updatePairHourData,
   updateTokenDayData,
 } from '../entities'
-import { findEthPerToken, getEthPrice } from '../pricing'
+import { findEthPerToken, getEthPrice } from '../../packages/pricing'
 
 const BLACKLIST_EXCHANGE_VOLUME: string[] = [
   '0x9ea3b5b4ec044b70375236a281986106457b20ef', // DELTA
