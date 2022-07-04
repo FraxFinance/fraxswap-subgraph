@@ -13,6 +13,7 @@ export function updatePairDayData(event: ethereum.Event): PairDayData {
   const id = event.address.toHex().concat('-').concat(BigInt.fromI32(day).toString())
 
   const pair = Pair.load(event.address.toHex())
+  if (!pair) throw "Pair is null";
 
   let pairDayData = PairDayData.load(id)
 

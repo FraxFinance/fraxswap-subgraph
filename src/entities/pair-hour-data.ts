@@ -13,6 +13,7 @@ export function updatePairHourData(event: ethereum.Event): PairHourData {
   const id = event.address.toHex().concat('-').concat(BigInt.fromI32(hour).toString())
 
   const pair = Pair.load(event.address.toHex())
+  if (!pair) throw "Pair is null";
 
   let pairHourData = PairHourData.load(id)
 

@@ -12,10 +12,13 @@ export function createLiquidityPositionSnapshot(position: LiquidityPosition, blo
   const bundle = getBundle()
 
   const pair = getPair(Address.fromString(position.pair), block)
+  if (!pair) throw "Pair is null";
 
   const token0 = getToken(Address.fromString(pair.token0))
+  if (!token0) throw "token0 is null";
 
   const token1 = getToken(Address.fromString(pair.token1))
+  if (!token1) throw "token1 is null";
 
   const snapshot = new LiquidityPositionSnapshot(id)
 

@@ -140,7 +140,9 @@ export function convertTokenToDecimal(tokenAmount: BigInt, exchangeDecimals: Big
 }
 
 function isCompleteMint(mintId: string): boolean {
-  return Mint.load(mintId).sender !== null // sufficient checks
+  const loaded_mint = Mint.load(mintId);
+  if (!loaded_mint) throw 'mint not found';
+  return loaded_mint.sender !== null // sufficient checks
 }
 
 export function onTransfer(event: TransferEvent): void {
@@ -157,6 +159,7 @@ export function onTransfer(event: TransferEvent): void {
   getUser(event.params.to)
 
   const pair = Pair.load(event.address.toHex())
+  if (!pair) throw "Pair is null";
 
   // liquidity token amount being transfered
   const value = event.params.value.divDecimal(BigDecimal.fromString('1e18'))
@@ -172,8 +175,10 @@ export function onTransfer(event: TransferEvent): void {
     transaction.swaps = new Array<string>()
   }
 
-  const mints = transaction.mints
-  const burns = transaction.burns
+  let mints = transaction.mints
+  if (!mints) mints = [];
+  let burns = transaction.burns
+  if (!burns) burns = [];
 
   // 3 cases, mints, send first on ETH withdrawls, and burns
 
@@ -185,7 +190,7 @@ export function onTransfer(event: TransferEvent): void {
     pair.save()
 
     // If transaction has no mints or last mint is complete
-    if (transaction.mints.length == 0 || isCompleteMint(mints[mints.length - 1])) {
+    if (mints.length == 0 || isCompleteMint(mints[mints.length - 1])) {
       // log.warning('1-1: NO MINTS OR LAST MINT IS COMPLETE', [])
       const mint = new Mint(event.transaction.hash.toHex().concat('-').concat(BigInt.fromI32(mints.length).toString()))
       mint.pair = pair.id
@@ -204,7 +209,7 @@ export function onTransfer(event: TransferEvent): void {
   } else if (event.params.to.toHex() == pair.id) {
     // case where direct send first on ETH withdrawls
     const burn = new Burn(
-      event.transaction.hash.toHex().concat('-').concat(BigInt.fromI32(transaction.burns.length).toString())
+      event.transaction.hash.toHex().concat('-').concat(BigInt.fromI32(burns.length).toString())
     )
     burn.pair = pair.id
     burn.liquidity = value
@@ -215,7 +220,7 @@ export function onTransfer(event: TransferEvent): void {
     burn.transaction = transaction.id
     burn.save()
 
-    transaction.burns = transaction.burns.concat([burn.id])
+    transaction.burns = burns.concat([burn.id])
 
     transaction.save()
   } else if (event.params.to == ADDRESS_ZERO && event.params.from.toHex() == pair.id) {
@@ -226,7 +231,7 @@ export function onTransfer(event: TransferEvent): void {
     let burn: Burn | null = null
 
     // If transaction has burns
-    if (transaction.burns.length) {
+    if (burns.length) {
       burn = Burn.load(burns[burns.length - 1])
     }
 
@@ -243,6 +248,7 @@ export function onTransfer(event: TransferEvent): void {
     // if this logical burn included a fee mint, account for this
     if (mints.length != 0 && !isCompleteMint(mints[mints.length - 1])) {
       const mint = Mint.load(mints[mints.length - 1])
+      if (!mint) throw "mint is null";
 
       burn.feeTo = mint.to
       burn.feeLiquidity = mint.liquidity
@@ -295,9 +301,12 @@ export function onTransfer(event: TransferEvent): void {
 
 export function onSync(event: SyncEvent): void {
   const pair = getPair(event.address, event.block)
+  if (!pair) throw "Pair is null";
 
   const token0 = getToken(Address.fromString(pair.token0))
   const token1 = getToken(Address.fromString(pair.token1))
+  if (!token0) throw "token0 is null";
+  if (!token1) throw "token1 is null";
 
   const factory = getFactory()
 
@@ -370,6 +379,7 @@ export function onSync(event: SyncEvent): void {
 
 export function onMint(event: MintEvent): void {
   const transaction = Transaction.load(event.transaction.hash.toHex())
+  if (!transaction) throw "transaction is null";
 
   const mints = transaction.mints
 
@@ -379,13 +389,17 @@ export function onMint(event: MintEvent): void {
   }
 
   const mint = Mint.load(mints[mints.length - 1])
+  if (!mint) throw "mint is null";
 
   const pair = getPair(event.address)
+  if (!pair) throw "Pair is null";
 
   const factory = getFactory()
 
   const token0 = getToken(Address.fromString(pair.token0))
   const token1 = getToken(Address.fromString(pair.token1))
+  if (!token0) throw "token0 is null";
+  if (!token1) throw "token1 is null";
 
   // update exchange info (except balances, sync will cover that)
   const token0Amount = convertTokenToDecimal(event.params.amount0, token0.decimals)
@@ -446,6 +460,7 @@ export function onBurn(event: BurnEvent): void {
   const transactionHash = event.transaction.hash.toHex()
   let transaction = Transaction.load(transactionHash)
   const pair = getPair(event.address)
+  if (!pair) throw "Pair is null";
 
   if (transaction === null) {
     transaction = new Transaction(transactionHash)
@@ -457,11 +472,12 @@ export function onBurn(event: BurnEvent): void {
     transaction.save()
   }
 
-  const burns = transaction.burns
+  let burns = transaction.burns
+  if (!burns) burns = [];
   let burn: Burn | null = null
 
   // If transaction has burns
-  if (transaction.burns.length) {
+  if (burns.length) {
     burn = Burn.load(burns[burns.length - 1])
   }
 
@@ -480,6 +496,8 @@ export function onBurn(event: BurnEvent): void {
   //update token info
   const token0 = getToken(Address.fromString(pair.token0))
   const token1 = getToken(Address.fromString(pair.token1))
+  if (!token0) throw "token0 is null";
+  if (!token1) throw "token1 is null";
 
   const token0Amount = convertTokenToDecimal(event.params.amount0, token0.decimals)
   const token1Amount = convertTokenToDecimal(event.params.amount1, token1.decimals)
@@ -487,6 +505,8 @@ export function onBurn(event: BurnEvent): void {
   // update txn counts
   token0.txCount = token0.txCount.plus(BigInt.fromI32(1))
   token1.txCount = token1.txCount.plus(BigInt.fromI32(1))
+  if (!token0) throw "token0 is null";
+  if (!token1) throw "token1 is null";
 
   // get new amounts of USD and ETH for tracking
   const bundle = getBundle()
@@ -538,8 +558,11 @@ export function onBurn(event: BurnEvent): void {
 export function onSwap(event: SwapEvent): void {
   log.info('onSwap', [])
   const pair = getPair(event.address, event.block)
+  if (!pair) throw "Pair is null";
   const token0 = getToken(Address.fromString(pair.token0))
   const token1 = getToken(Address.fromString(pair.token1))
+  if (!token0) throw "token0 is null";
+  if (!token1) throw "token1 is null";
   const amount0In = convertTokenToDecimal(event.params.amount0In, token0.decimals)
   const amount1In = convertTokenToDecimal(event.params.amount1In, token1.decimals)
   const amount0Out = convertTokenToDecimal(event.params.amount0Out, token0.decimals)
@@ -625,7 +648,8 @@ export function onSwap(event: SwapEvent): void {
     transaction.burns = []
   }
 
-  const swaps = transaction.swaps
+  let swaps = transaction.swaps
+  if (!swaps) swaps = []
 
   const swap = new Swap(event.transaction.hash.toHex().concat('-').concat(BigInt.fromI32(swaps.length).toString()))
 
@@ -645,7 +669,7 @@ export function onSwap(event: SwapEvent): void {
   swap.save()
 
   // update the transaction
-  transaction.swaps = transaction.swaps.concat([swap.id])
+  transaction.swaps = swaps.concat([swap.id]);
 
   transaction.save()
 
