@@ -148,7 +148,8 @@ export function getTotalSupply(address: Address): BigInt {
   let totalSupplyValue = null
   const totalSupplyResult = contract.try_totalSupply()
   if (!totalSupplyResult.reverted) {
-    totalSupplyValue = totalSupplyResult as i32
+    // totalSupplyValue = totalSupplyResult as i32
+    totalSupplyValue = totalSupplyResult.value.toI32();
   }
   return BigInt.fromI32(totalSupplyValue as i32)
 }
