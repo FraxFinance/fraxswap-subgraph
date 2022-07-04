@@ -391,7 +391,7 @@ export function onMint(event: MintEvent): void {
   const mint = Mint.load(mints[mints.length - 1])
   if (!mint) throw "mint is null";
 
-  const pair = getPair(event.address)
+  const pair = getPair(event.address, event.block)
   if (!pair) throw "Pair is null";
 
   const factory = getFactory()
@@ -459,7 +459,7 @@ export function onMint(event: MintEvent): void {
 export function onBurn(event: BurnEvent): void {
   const transactionHash = event.transaction.hash.toHex()
   let transaction = Transaction.load(transactionHash)
-  const pair = getPair(event.address)
+  const pair = getPair(event.address, event.block)
   if (!pair) throw "Pair is null";
 
   if (transaction === null) {

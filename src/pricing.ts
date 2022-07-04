@@ -35,7 +35,7 @@ export function getSushiPrice(): BigDecimal {
   return BIG_DECIMAL_ZERO
 }
 
-export function getEthPrice(block: ethereum.Block = null): BigDecimal {
+export function getEthPrice(block?: ethereum.Block): BigDecimal {
   // TODO: We can can get weighted averages, but this will do for now.
   // If block number is less than or equal to the last stablecoin migration (ETH-USDT), use uniswap eth price.
   // After this last migration, we can use sushiswap pricing.
@@ -186,15 +186,18 @@ export function findEthPerToken(token: Token): BigDecimal {
   for (let i = 0; i < whitelist.length; ++i) {
     const pairAddress = whitelist[i]
     const pair = Pair.load(pairAddress)
+    if (!pair) throw "Pair not found";
 
     if (pair.token0 == token.id && pair.reserveETH.gt(MINIMUM_LIQUIDITY_THRESHOLD_ETH)) {
       const token1 = Token.load(pair.token1)
+      if (!token1) throw "token1 not found";
 
       return pair.token1Price.times(token1.derivedETH as BigDecimal) // return token1 per our token * Eth per token 1
     }
 
     if (pair.token1 == token.id && pair.reserveETH.gt(MINIMUM_LIQUIDITY_THRESHOLD_ETH)) {
       const token0 = Token.load(pair.token0)
+      if (!token0) throw "token0 not found";
       return pair.token0Price.times(token0.derivedETH as BigDecimal) // return token0 per our token * ETH per token 0
     }
   }

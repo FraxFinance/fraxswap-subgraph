@@ -1,5 +1,5 @@
 import { Address, ethereum } from '@graphprotocol/graph-ts'
-import { BIG_DECIMAL_ZERO, BIG_INT_ZERO, FACTORY_ADDRESS, WHITELIST } from '../../packages/constants/index.template'
+import { ADDRESS_ZERO, BIG_DECIMAL_ZERO, BIG_INT_ZERO, FACTORY_ADDRESS, WHITELIST } from '../../packages/constants/index.template'
 
 import { Pair } from '../../generated/schema'
 import { FraxswapPair as PairContract } from '../../generated/templates/FraxswapPair/FraxswapPair'
@@ -7,9 +7,9 @@ import { getToken } from '.'
 
 export function getPair(
   address: Address,
-  block: ethereum.Block = null,
-  token0FromParams: Address = null,
-  token1FromParams: Address = null
+  block: ethereum.Block,
+  token0FromParams: Address = ADDRESS_ZERO,
+  token1FromParams: Address = ADDRESS_ZERO
 ): Pair | null {
   let pair = Pair.load(address.toHex())
 
