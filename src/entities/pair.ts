@@ -1,8 +1,8 @@
 import { Address, ethereum } from '@graphprotocol/graph-ts'
-import { BIG_DECIMAL_ZERO, BIG_INT_ZERO, FACTORY_ADDRESS, WHITELIST } from 'const'
+import { BIG_DECIMAL_ZERO, BIG_INT_ZERO, FACTORY_ADDRESS, WHITELIST } from '../../packages/constants/index.template'
 
 import { Pair } from '../../generated/schema'
-import { Pair as PairContract } from '../../generated/templates/Pair/Pair'
+import { FraxswapPair as PairContract } from '../../generated/templates/FraxswapPair/FraxswapPair'
 import { getToken } from '.'
 
 export function getPair(

@@ -1,8 +1,8 @@
 import { getFactory, getPair } from '../entities'
 
-import { BIG_INT_ONE } from 'const'
+import { BIG_INT_ONE } from '../../packages/constants/index.template'
 import { PairCreated } from '../../generated/FraxswapFactory/FraxswapFactory'
-import { Pair as PairTemplate } from '../../generated/templates'
+import { FraxswapPair as PairTemplate } from '../../generated/templates'
 
 export function onPairCreated(event: PairCreated): void {
   const factory = getFactory()

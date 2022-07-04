@@ -1,9 +1,9 @@
 import { Address, BigInt, dataSource, log } from '@graphprotocol/graph-ts'
-import { BIG_DECIMAL_ZERO, BIG_INT_ZERO, NULL_CALL_RESULT_VALUE } from 'const'
+import { BIG_DECIMAL_ZERO, BIG_INT_ZERO, NULL_CALL_RESULT_VALUE } from '../../packages/constants/index.template'
 
-import { ERC20 } from '../../generated/Factory/ERC20'
-import { ERC20NameBytes } from '../../generated/Factory/ERC20NameBytes'
-import { ERC20SymbolBytes } from '../../generated/Factory/ERC20SymbolBytes'
+import { ERC20 } from '../../generated/FraxswapFactory/ERC20'
+import { ERC20NameBytes } from '../../generated/FraxswapFactory/ERC20NameBytes'
+import { ERC20SymbolBytes } from '../../generated/FraxswapFactory/ERC20SymbolBytes'
 import { Token } from '../../generated/schema'
 import { getFactory } from './factory'
 
