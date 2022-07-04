@@ -8,16 +8,64 @@ dataSources:
     source:
       address: "0xB076b06F669e682609fb4a8C6646D2619717Be4b"
       abi: FraxswapFactory
+      startBlock: 14775229
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
+      file: FraxswapFactory/FraxswapFactory.wasm
       entities:
-        - PairCreated
+        - FraxswapFactory
       abis:
         - name: FraxswapFactory
           file: FraxswapFactory/abis/FraxswapFactory.json
+        - name: FraxswapPair
+          file: FraxswapFactory/abis/FraxswapPair.json
+        - name: ERC20
+          file: FraxswapFactory/abis/ERC20.json
+        - name: ERC20SymbolBytes
+          file: FraxswapFactory/abis/ERC20SymbolBytes.json
+        - name: ERC20NameBytes
+          file: FraxswapFactory/abis/ERC20NameBytes.json
       eventHandlers:
         - event: PairCreated(indexed address,indexed address,address,uint256)
-          handler: handlePairCreated
-      file: FraxswapFactory/FraxswapFactory.wasm
+          handler: onPairCreated
+templates:
+  - kind: ethereum
+    name: FraxswapPair
+    network: mainnet
+    source:
+      abi: FraxswapPair
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: templates/FraxswapPair/FraxswapPair.wasm
+      entities:
+        - Bundle
+        - Burn
+        - LiquidityPosition
+        - LiquidityPositionSnapshot
+        - Mint
+        - Pair
+        - Swap
+        - Sync
+        - Token
+        - Transaction
+        - User
+      abis:
+        - name: FraxswapPair
+          file: FraxswapPair/abis/FraxswapPair.json
+        - name: FraxswapFactory
+          file: FraxswapPair/abis/FraxswapFactory.json
+      eventHandlers:
+        - event: Mint(indexed address,uint256,uint256)
+          handler: onMint
+        - event: Burn(indexed address,uint256,uint256,indexed address)
+          handler: onBurn
+        - event: Swap(indexed address,uint256,uint256,uint256,uint256,indexed address)
+          handler: onSwap
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: onTransfer
+        - event: Sync(uint112,uint112)
+          handler: onSync

@@ -1,16 +1,36 @@
 {
   "name": "fraxswap-subgraph",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "subgraphs/*"
+  ],
   "license": "UNLICENSED",
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ fraxswap-subgraph",
-    "create-local": "graph create --node http://localhost:8020/ fraxswap-subgraph",
-    "remove-local": "graph remove --node http://localhost:8020/ fraxswap-subgraph",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 fraxswap-subgraph"
+    "build-yarn": "yarn workspaces run build",
+    "codegen-yarn": "yarn workspaces run codegen",
+    "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ fraxswap",
+    "create-local": "graph create --node http://localhost:8020/ fraxswap",
+    "remove-local": "graph remove --node http://localhost:8020/ fraxswap",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 fraxswap",
+    "prepare:bsc": "yarn workspaces run prepare:bsc",
+    "prepare:fantom": "yarn workspaces run prepare:fantom",
+    "prepare:mainnet": "yarn workspaces run prepare:mainnet",
+    "prepare:matic": "yarn workspaces run prepare:matic"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "0.32.0",
-    "@graphprotocol/graph-ts": "0.27.0"
+    "@graphprotocol/graph-ts": "0.27.0",
+    "@typescript-eslint/eslint-plugin": "^5.30.5",
+    "@typescript-eslint/parser": "^5.30.5",
+    "ejs": "^3.1.8",
+    "eslint": "^8.19.0",
+    "eslint-config-prettier": "^8.5.0",
+    "handlebars": "^4.7.7",
+    "mustache": "^4.2.0",
+    "prettier": "^2.7.1",
+    "typescript": "^4.7.4"
   }
 }
