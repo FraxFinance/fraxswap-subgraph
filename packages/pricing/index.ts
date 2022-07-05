@@ -4,29 +4,29 @@ import {
   BIG_DECIMAL_1E6,
   BIG_DECIMAL_ONE,
   BIG_DECIMAL_ZERO,
+  BIG_NATIVE_START_PRICE,
   FACTORY_ADDRESS,
-  SUSHISWAP_WETH_USDT_PAIR_ADDRESS,
-  SUSHI_TOKEN_ADDRESS,
-  SUSHI_USDT_PAIR_ADDRESS,
-  UNISWAP_FACTORY_ADDRESS,
-  UNISWAP_SUSHI_ETH_PAIR_FIRST_LIQUDITY_BLOCK,
-  UNISWAP_SUSHI_USDT_PAIR_ADDRESS,
-  UNISWAP_WETH_USDT_PAIR_ADDRESS,
-  USDT_ADDRESS,
+  FRAXSWAP_FRAX_WETH_PAIR_ADDRESS,
+  FRAXSWAP_FRAX_WETH_PAIR_DEPLOY_BLOCK,
+  FXS_ADDRESS,
+  BIG_FXS_START_PRICE,
+  FRAX_FXS_PAIR_ADDRESS,
+  FRAX_ADDRESS,
   WETH_ADDRESS,
-} from 'const'
+} from 'const';
 import { Address, BigDecimal, BigInt, ethereum, log } from '@graphprotocol/graph-ts'
 
-import { Factory as FactoryContract } from 'exchange/generated/Factory/Factory'
-import { Pair as PairContract } from 'exchange/generated/Factory/Pair'
+import { FraxswapFactory as FactoryContract } from '../../generated/FraxswapFactory/FraxswapFactory'
+import { FraxswapPair as PairContract } from '../../generated//FraxswapFactory/FraxswapPair'
 
 export function getUSDRate(token: Address, block: ethereum.Block): BigDecimal {
-  const usdt = BIG_DECIMAL_ONE
+  const usd_price = BIG_DECIMAL_ONE;
 
-  if (token != USDT_ADDRESS) {
-    const address = block.number.le(BigInt.fromI32(10829344))
-      ? UNISWAP_WETH_USDT_PAIR_ADDRESS
-      : SUSHISWAP_WETH_USDT_PAIR_ADDRESS
+  if (block.number.le(BigInt.fromI32(FRAXSWAP_FRAX_WETH_PAIR_DEPLOY_BLOCK))) {
+    return usd_price // Return 1
+  }
+  else if (token != FRAX_ADDRESS) {
+    const address = FRAXSWAP_FRAX_WETH_PAIR_ADDRESS
 
     const tokenPriceETH = getEthRate(token, block)
 
@@ -43,16 +43,19 @@ export function getUSDRate(token: Address, block: ethereum.Block): BigDecimal {
     return ethPriceUSD.times(tokenPriceETH)
   }
 
-  return usdt
+  return usd_price
 }
 
 export function getEthRate(token: Address, block: ethereum.Block): BigDecimal {
-  let eth = BIG_DECIMAL_ONE
+  let eth_price = BIG_NATIVE_START_PRICE
 
-  if (token != WETH_ADDRESS) {
-    const factory = FactoryContract.bind(
-      block.number.le(BigInt.fromI32(10829344)) ? UNISWAP_FACTORY_ADDRESS : FACTORY_ADDRESS
-    )
+  if (block.number.le(BigInt.fromI32(FRAXSWAP_FRAX_WETH_PAIR_DEPLOY_BLOCK))) {
+    // FRAX/FXS was deployed really close to FRAX/WETH, so this should be ok
+    // This is more of a short corner case
+    return eth_price
+  }
+  else if (token != WETH_ADDRESS) {
+    const factory = FactoryContract.bind(FACTORY_ADDRESS)
 
     const address = factory.getPair(token, WETH_ADDRESS)
 
@@ -65,34 +68,35 @@ export function getEthRate(token: Address, block: ethereum.Block): BigDecimal {
 
     const reserves = pair.getReserves()
 
-    eth =
+    eth_price =
       pair.token0() == WETH_ADDRESS
         ? reserves.value0.toBigDecimal().times(BIG_DECIMAL_1E18).div(reserves.value1.toBigDecimal())
         : reserves.value1.toBigDecimal().times(BIG_DECIMAL_1E18).div(reserves.value0.toBigDecimal())
 
-    return eth.div(BIG_DECIMAL_1E18)
+    return eth_price.div(BIG_DECIMAL_1E18)
   }
 
-  return eth
+  return eth_price
 }
 
-export function getSushiPrice(block: ethereum.Block): BigDecimal {
-  if (block.number.lt(UNISWAP_SUSHI_ETH_PAIR_FIRST_LIQUDITY_BLOCK)) {
-    // If before uniswap sushi-eth pair creation and liquidity added, return zero
-    return BIG_DECIMAL_ZERO
-  } else if (block.number.lt(BigInt.fromI32(10800029))) {
-    // Else if before uniswap sushi-usdt pair creation (get price from eth sushi-eth pair above)
-    return getUSDRate(SUSHI_TOKEN_ADDRESS, block)
-  } else {
-    // Else get price from either uni or sushi usdt pair depending on space-time
-    const pair = PairContract.bind(
-      block.number.le(BigInt.fromI32(10829344)) ? UNISWAP_SUSHI_USDT_PAIR_ADDRESS : SUSHI_USDT_PAIR_ADDRESS
-    )
-    const reserves = pair.getReserves()
-    return reserves.value1
-      .toBigDecimal()
-      .times(BIG_DECIMAL_1E18)
-      .div(reserves.value0.toBigDecimal())
-      .div(BIG_DECIMAL_1E6)
+export function getFxsPrice(block: ethereum.Block): BigDecimal {
+  let fxs_price = BIG_FXS_START_PRICE;
+
+  if (block.number.lt(BigInt.fromI32(FRAXSWAP_FRAX_WETH_PAIR_DEPLOY_BLOCK))) {
+    // Approx price for now
+    return fxs_price
   }
+  else {
+    // Else get price from either uni or sushi usdt pair depending on space-time
+    const pair = PairContract.bind(FRAX_FXS_PAIR_ADDRESS)
+    const reserves = pair.getReserves()
+
+    fxs_price =
+      pair.token0() == FXS_ADDRESS
+        ? reserves.value0.toBigDecimal().times(BIG_DECIMAL_1E18).div(reserves.value1.toBigDecimal())
+        : reserves.value1.toBigDecimal().times(BIG_DECIMAL_1E18).div(reserves.value0.toBigDecimal())
+
+  }
+
+  return fxs_price;
 }

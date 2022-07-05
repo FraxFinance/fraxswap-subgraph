@@ -12,9 +12,6 @@
   "scripts": {
     "codegen": "true",
     "build": "true",
-    "prepare:bsc": "true",
-    "prepare:fantom": "true",
-    "prepare:mainnet": "true",
-    "prepare:matic": "true"
+    "prepare:mainnet": "true"
   }
 }

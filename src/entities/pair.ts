@@ -1,5 +1,5 @@
 import { Address, ethereum } from '@graphprotocol/graph-ts'
-import { ADDRESS_ZERO, BIG_DECIMAL_ZERO, BIG_INT_ZERO, FACTORY_ADDRESS, WHITELIST } from '../../packages/constants/index.template'
+import { ADDRESS_ZERO, BIG_DECIMAL_ZERO, BIG_INT_ZERO, FACTORY_ADDRESS, WHITELIST } from 'const'
 
 import { Pair } from '../../generated/schema'
 import { FraxswapPair as PairContract } from '../../generated/templates/FraxswapPair/FraxswapPair'
