@@ -1,5 +1,5 @@
 import { Address, BigInt, dataSource, log } from '@graphprotocol/graph-ts'
-import { BIG_DECIMAL_ZERO, BIG_INT_ZERO, NULL_CALL_RESULT_VALUE } from '../../packages/constants'
+import { BIG_DECIMAL_ZERO, BIG_INT_ZERO, NULL_CALL_RESULT_VALUE } from 'const'
 
 import { ERC20 } from '../../generated/FraxswapFactory/ERC20'
 import { ERC20NameBytes } from '../../generated/FraxswapFactory/ERC20NameBytes'
@@ -145,7 +145,7 @@ export function getTotalSupply(address: Address): BigInt {
   }
 
   const contract = ERC20.bind(address)
-  let totalSupplyValue = null
+  let totalSupplyValue = null;
   const totalSupplyResult = contract.try_totalSupply()
   if (!totalSupplyResult.reverted) {
     // totalSupplyValue = totalSupplyResult as i32

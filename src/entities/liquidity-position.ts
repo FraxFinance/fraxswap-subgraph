@@ -1,5 +1,5 @@
 import { Address, BigDecimal, BigInt, ethereum } from '@graphprotocol/graph-ts'
-import { BIG_DECIMAL_ZERO, BIG_INT_ZERO } from '../../packages/constants'
+import { BIG_DECIMAL_ZERO, BIG_INT_ZERO } from 'const'
 import { LiquidityPosition, Pair } from '../../generated/schema'
 
 import { FraxswapPair as PairContract } from '../../generated/templates/FraxswapPair/FraxswapPair'

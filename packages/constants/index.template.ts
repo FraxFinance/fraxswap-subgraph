@@ -48,6 +48,10 @@ export const FXS_ADDRESS = Address.fromString(
   '{{ fxs_address }}{{^fxs_address}}0x0000000000000000000000000000000000000000{{/fxs_address}}'
 )
 
+export const BIG_FXS_START_PRICE = BigDecimal.fromString(
+  '{{ fxs_start_price }}{{^fxs_start_price}}8380000000000000000{{/fxs_start_price}}'
+)
+
 export const FRAX_FXS_PAIR_ADDRESS = Address.fromString(
   '{{ frax_fxs_pair_address }}{{^frax_fxs_pair_address}}0x0000000000000000000000000000000000000000{{/frax_fxs_pair_address}}'
 )
@@ -65,15 +69,28 @@ export const MINIMUM_LIQUIDITY_THRESHOLD_ETH = BigDecimal.fromString(
   '{{ minimum_liquidity_threshold_eth }}{{^minimum_liquidity_threshold_eth}}1{{/minimum_liquidity_threshold_eth}}'
 )
 
+export const NATIVE = Address.fromString(
+  '{{ native_address }}{{^native_address}}0x0000000000000000000000000000000000000000{{/native_address}}'
+)
+
 export const WETH_ADDRESS = Address.fromString(
   '{{ weth_address }}{{^weth_address}}0x0000000000000000000000000000000000000000{{/weth_address}}'
 )
+
+export const BIG_NATIVE_START_PRICE = BigDecimal.fromString(
+  '{{ native_start_price }}{{^native_start_price}}2143000000000000000000{{/native_start_price}}'
+)
+
 
 export const FRAXSWAP_FRAX_WETH_PAIR_ADDRESS = Address.fromString(
   '{{ fraxswap_frax_weth_pair_address }}{{^fraxswap_frax_weth_pair_address}}0x0000000000000000000000000000000000000000{{/fraxswap_frax_weth_pair_address}}'
 )
 
 export const FRAXSWAP_FRAX_WETH_PAIR = '{{ fraxswap_frax_weth_pair }}{{^fraxswap_frax_weth_pair}}0x0000000000000000000000000000000000000000{{/fraxswap_frax_weth_pair}}'
+
+export const FRAXSWAP_FRAX_WETH_PAIR_DEPLOY_BLOCK = BigDecimal.fromString(
+  '{{ fraxswap_frax_weth_pair_deploy_block }}{{^fraxswap_frax_weth_pair_deploy_block}}14776073{{/fraxswap_frax_weth_pair_deploy_block}}'
+)
 
 export const STABLE_WNATIVE_PAIR =
   '{{ stable_wnative_pair }}{{^stable_wnative_pair}}0x0000000000000000000000000000000000000000{{/stable_wnative_pair}}'
@@ -88,9 +105,6 @@ export const FRAX_ADDRESS = Address.fromString(
 
 export const FRAX = '{{ frax_address }}{{^frax_address}}0x0000000000000000000000000000000000000000{{/frax_address}}'
 
-export const NATIVE = Address.fromString(
-  '{{ native_address }}{{^native_address}}0x0000000000000000000000000000000000000000{{/native_address}}'
-)
 
 export const WHITELIST: string[] = '{{ whitelist }}'.split(',')
 

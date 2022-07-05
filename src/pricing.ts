@@ -9,7 +9,7 @@ import {
   FRAXSWAP_FRAX_WETH_PAIR,
   FRAX,
   NATIVE
-} from '../packages/constants'
+} from 'const'
 import { Address, BigDecimal, BigInt, dataSource, ethereum, log } from '@graphprotocol/graph-ts'
 import { Pair, Token } from '../generated/schema'
 

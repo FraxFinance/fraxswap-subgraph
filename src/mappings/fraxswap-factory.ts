@@ -1,6 +1,6 @@
 import { getFactory, getPair } from '../entities'
 
-import { BIG_INT_ONE } from '../../packages/constants'
+import { BIG_INT_ONE } from 'const'
 import { PairCreated } from '../../generated/FraxswapFactory/FraxswapFactory'
 import { FraxswapPair as PairTemplate } from '../../generated/templates'
 
