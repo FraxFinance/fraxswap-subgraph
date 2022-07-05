@@ -11,6 +11,7 @@ export function getPair(
   token0FromParams: Address = ADDRESS_ZERO,
   token1FromParams: Address = ADDRESS_ZERO
 ): Pair | null {
+
   let pair = Pair.load(address.toHex())
 
   if (pair === null) {

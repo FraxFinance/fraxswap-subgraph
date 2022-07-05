@@ -7,10 +7,10 @@
   ],
   "license": "UNLICENSED",
   "scripts": {
-    "codegen": "graph codegen",
+    "codegen": "yarn workspaces run prepare:mainnet && graph codegen",
     "build": "graph build",
     "build-yarn": "yarn workspaces run prepare:mainnet && yarn workspaces run build",
-    "codegen-yarn": "yarn workspaces run codegen",
+    "codegen-yarn": "yarn workspaces run prepare:mainnet && yarn workspaces run codegen",
     "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ fraxswap",
     "create-local": "graph create --node http://localhost:8020/ fraxswap",
     "remove-local": "graph remove --node http://localhost:8020/ fraxswap",
@@ -29,5 +29,8 @@
     "mustache": "^4.2.0",
     "prettier": "^2.7.1",
     "typescript": "^4.7.4"
+  },
+  "devDependencies": {
+    "matchstick-as": "^0.5.0"
   }
 }
