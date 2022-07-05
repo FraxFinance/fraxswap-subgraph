@@ -9,16 +9,13 @@
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "build-yarn": "yarn workspaces run build",
+    "build-yarn": "yarn workspaces run prepare:mainnet && yarn workspaces run build",
     "codegen-yarn": "yarn workspaces run codegen",
     "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ fraxswap",
     "create-local": "graph create --node http://localhost:8020/ fraxswap",
     "remove-local": "graph remove --node http://localhost:8020/ fraxswap",
     "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 fraxswap",
-    "prepare:bsc": "yarn workspaces run prepare:bsc",
-    "prepare:fantom": "yarn workspaces run prepare:fantom",
-    "prepare:mainnet": "yarn workspaces run prepare:mainnet",
-    "prepare:matic": "yarn workspaces run prepare:matic"
+    "prepare:mainnet": "yarn workspaces run prepare:mainnet"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "0.32.0",

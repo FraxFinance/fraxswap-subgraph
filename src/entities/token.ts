@@ -1,5 +1,5 @@
 import { Address, BigInt, dataSource, log } from '@graphprotocol/graph-ts'
-import { BIG_DECIMAL_ZERO, BIG_INT_ZERO, NULL_CALL_RESULT_VALUE } from '../../packages/constants/index.template'
+import { BIG_DECIMAL_ZERO, BIG_INT_ZERO, NULL_CALL_RESULT_VALUE } from '../../packages/constants'
 
 import { ERC20 } from '../../generated/FraxswapFactory/ERC20'
 import { ERC20NameBytes } from '../../generated/FraxswapFactory/ERC20NameBytes'

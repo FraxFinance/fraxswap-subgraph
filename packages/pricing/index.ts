@@ -5,14 +5,10 @@ import {
   BIG_DECIMAL_ONE,
   BIG_DECIMAL_ZERO,
   FACTORY_ADDRESS,
-  SUSHISWAP_WETH_USDT_PAIR_ADDRESS,
-  SUSHI_TOKEN_ADDRESS,
-  SUSHI_USDT_PAIR_ADDRESS,
-  UNISWAP_FACTORY_ADDRESS,
-  UNISWAP_SUSHI_ETH_PAIR_FIRST_LIQUDITY_BLOCK,
-  UNISWAP_SUSHI_USDT_PAIR_ADDRESS,
-  UNISWAP_WETH_USDT_PAIR_ADDRESS,
-  USDT_ADDRESS,
+  FRAXSWAP_FRAX_WETH_PAIR_ADDRESS,
+  FXS_ADDRESS,
+  FRAX_FXS_PAIR_ADDRESS,
+  FRAX_ADDRESS,
   WETH_ADDRESS,
 } from 'const'
 import { Address, BigDecimal, BigInt, ethereum, log } from '@graphprotocol/graph-ts'
@@ -23,10 +19,10 @@ import { Pair as PairContract } from 'exchange/generated/Factory/Pair'
 export function getUSDRate(token: Address, block: ethereum.Block): BigDecimal {
   const usdt = BIG_DECIMAL_ONE
 
-  if (token != USDT_ADDRESS) {
+  if (token != FRAX_ADDRESS) {
     const address = block.number.le(BigInt.fromI32(10829344))
       ? UNISWAP_WETH_USDT_PAIR_ADDRESS
-      : SUSHISWAP_WETH_USDT_PAIR_ADDRESS
+      : FRAXSWAP_FRAX_WETH_PAIR_ADDRESS
 
     const tokenPriceETH = getEthRate(token, block)
 
@@ -76,17 +72,17 @@ export function getEthRate(token: Address, block: ethereum.Block): BigDecimal {
   return eth
 }
 
-export function getSushiPrice(block: ethereum.Block): BigDecimal {
+export function getFxsPrice(block: ethereum.Block): BigDecimal {
   if (block.number.lt(UNISWAP_SUSHI_ETH_PAIR_FIRST_LIQUDITY_BLOCK)) {
     // If before uniswap sushi-eth pair creation and liquidity added, return zero
     return BIG_DECIMAL_ZERO
   } else if (block.number.lt(BigInt.fromI32(10800029))) {
     // Else if before uniswap sushi-usdt pair creation (get price from eth sushi-eth pair above)
-    return getUSDRate(SUSHI_TOKEN_ADDRESS, block)
+    return getUSDRate(FXS_ADDRESS, block)
   } else {
     // Else get price from either uni or sushi usdt pair depending on space-time
     const pair = PairContract.bind(
-      block.number.le(BigInt.fromI32(10829344)) ? UNISWAP_SUSHI_USDT_PAIR_ADDRESS : SUSHI_USDT_PAIR_ADDRESS
+      block.number.le(BigInt.fromI32(10829344)) ? UNISWAP_FRAX_FXS_PAIR_ADDRESS : FRAX_FXS_PAIR_ADDRESS
     )
     const reserves = pair.getReserves()
     return reserves.value1
