@@ -1,5 +1,5 @@
 import { ADDRESS_ZERO, BIG_DECIMAL_ZERO, MINIMUM_USD_THRESHOLD_NEW_PAIRS, WHITELIST } from 'const'
-import { Address, BigDecimal, BigInt, dataSource, log, store } from '@graphprotocol/graph-ts'
+import { Address, BigDecimal, BigInt, dataSource, log, store, ethereum } from '@graphprotocol/graph-ts'
 import { Burn, Mint, Pair, Swap, Token, Transaction } from '../../generated/schema'
 import {
   Burn as BurnEvent,
