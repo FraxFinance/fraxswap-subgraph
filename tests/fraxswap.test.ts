@@ -1,3 +1,4 @@
+
 import { assert, createMockedFunction, clearStore, test, newMockEvent, newMockCall, countEntities, mockIpfsFile, log } from "matchstick-as/assembly/index";
 import { Address, BigInt, Bytes, ethereum, store, Value, ipfs } from "@graphprotocol/graph-ts";
 
@@ -63,17 +64,26 @@ test("Can manually add FRAX/FXS", () => {
     let the_event = newMockEvent(); // https://etherscan.io/block/14776073
     the_event.block.timestamp = BigInt.fromString("1652564576");
     the_event.block.number = BigInt.fromString("14776073");
-
-    // let the_pair_created: PairCreated = the_event;
-
-    // the_pair_created.params =  {
+    
+    // @ts-ignore
+    // let the_pair_created: unknown;
+    // the_pair_created = {
+    //     ...the_event,
+    //     params: {
+    //         _event: the_pair_created,
     //         token0: Address.fromString("0x3432B6A60D23Ca0dFCa7761B7ab56459D9C964D0"), // FXS
     //         token1: Address.fromString("0x853d955aCEf822Db058eb8505911ED77F175b99e"), // FRAX
     //         pair: Address.fromString("0x8206412c107eF1aDb70B9277974f5163760E128E"), // Fraxswap FRAX/FXS
     //         param3: BigInt.fromString("3")
-    // }
-    // onPairCreated(the_pair_created)
+    //     }
+    // };
 
+    const pair = getPair(
+        Address.fromString("0x8206412c107eF1aDb70B9277974f5163760E128E"), // Fraxswap FRAX/FXS
+        the_event.block, 
+        Address.fromString("0x3432B6A60D23Ca0dFCa7761B7ab56459D9C964D0"), // FXS
+        Address.fromString("0x853d955aCEf822Db058eb8505911ED77F175b99e"), // FRAX
+    );
 
     clearStore()
 })

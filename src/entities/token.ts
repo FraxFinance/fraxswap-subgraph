@@ -24,7 +24,7 @@ export function getToken(address: Address): Token | null {
 
     // TODO: Does this ever happen?
     if (decimals === null) {
-      log.warning('Demicals for token {} was null', [address.toHex()])
+      log.warning('Decimals for token {} was null', [address.toHex()])
       return null
     }
 
@@ -145,13 +145,13 @@ export function getTotalSupply(address: Address): BigInt {
   }
 
   const contract = ERC20.bind(address)
-  let totalSupplyValue = null;
-  const totalSupplyResult = contract.try_totalSupply()
+  const totalSupplyResult = contract.try_totalSupply(); // Should return a BigInt
   if (!totalSupplyResult.reverted) {
-    // totalSupplyValue = totalSupplyResult as i32
-    totalSupplyValue = totalSupplyResult.value.toI32();
+    return totalSupplyResult.value
   }
-  return BigInt.fromI32(totalSupplyValue as i32)
+  else {
+    return BigInt.fromI32(1)
+  }
 }
 
 export function getDecimals(address: Address): BigInt {

@@ -1,5 +1,5 @@
 import { ADDRESS_ZERO, BIG_DECIMAL_ZERO, MINIMUM_USD_THRESHOLD_NEW_PAIRS, WHITELIST } from 'const'
-import { Address, BigDecimal, BigInt, dataSource, log, store, ethereum } from '@graphprotocol/graph-ts'
+import { Address, Bytes, BigDecimal, BigInt, dataSource, log, store, ethereum } from '@graphprotocol/graph-ts'
 import { Burn, Mint, Pair, Swap, Token, Transaction } from '../../generated/schema'
 import {
   Burn as BurnEvent,
@@ -434,8 +434,9 @@ export function onMint(event: MintEvent): void {
   mint.amountUSD = amountTotalUSD as BigDecimal
   mint.save()
 
+
   // create liquidity position
-  const liquidityPosition = createLiquidityPosition(mint.to as Address, event.address, event.block)
+  const liquidityPosition = createLiquidityPosition(Address.fromBytes(mint.to), event.address, event.block)
 
   // create liquidity position snapshot
   createLiquidityPositionSnapshot(liquidityPosition, event.block)
@@ -536,7 +537,8 @@ export function onBurn(event: BurnEvent): void {
   burn.save()
 
   // update the LP position
-  const liquidityPosition = createLiquidityPosition(burn.sender as Address, event.address, event.block)
+  const burnSender = Address.fromBytes(burn.sender as Bytes)
+  const liquidityPosition = createLiquidityPosition(burnSender, event.address, event.block)
   createLiquidityPositionSnapshot(liquidityPosition, event.block)
 
   // update day data
