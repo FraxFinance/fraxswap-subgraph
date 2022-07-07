@@ -31,7 +31,7 @@ export function createLiquidityPositionSnapshot(position: LiquidityPosition, blo
   snapshot.reserve0 = pair.reserve0
   snapshot.reserve1 = pair.reserve1
   snapshot.twammReserve0 = pair.twammReserve0
-  snapshot.twammReserve0 = pair.twammReserve1
+  snapshot.twammReserve1 = pair.twammReserve1
   snapshot.reserveUSD = pair.reserveUSD
   snapshot.liquidityTokenTotalSupply = pair.totalSupply
   snapshot.liquidityTokenBalance = position.liquidityTokenBalance
