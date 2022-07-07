@@ -58,6 +58,8 @@ export function getPair(
     pair.txCount = BIG_INT_ZERO
     pair.reserve0 = BIG_DECIMAL_ZERO
     pair.reserve1 = BIG_DECIMAL_ZERO
+    pair.twammReserve0 = BIG_DECIMAL_ZERO
+    pair.twammReserve1 = BIG_DECIMAL_ZERO
     pair.trackedReserveETH = BIG_DECIMAL_ZERO
     pair.reserveETH = BIG_DECIMAL_ZERO
     pair.reserveUSD = BIG_DECIMAL_ZERO

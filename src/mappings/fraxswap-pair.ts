@@ -317,8 +317,17 @@ export function onSync(event: SyncEvent): void {
   token0.liquidity = token0.liquidity.minus(pair.reserve0)
   token1.liquidity = token1.liquidity.minus(pair.reserve1)
 
-  pair.reserve0 = convertTokenToDecimal(event.params.reserve0, token0.decimals)
-  pair.reserve1 = convertTokenToDecimal(event.params.reserve1, token1.decimals)
+  // Fetch reserves, accounting for outstanding TWAMMs
+  const pair_contract = PairContract.bind(event.address)
+  const reserves_true = pair_contract.getReserveAfterTwamm(event.block.timestamp)
+  const reserve0_true = reserves_true.get_reserve0()
+  const reserve1_true = reserves_true.get_reserve1()
+
+  // Set to the true reserve values, accounting for outstanding TWAMMs
+  pair.reserve0 = convertTokenToDecimal(reserve0_true, token0.decimals)
+  pair.reserve1 = convertTokenToDecimal(reserve1_true, token1.decimals)
+  pair.twammReserve0 = convertTokenToDecimal(reserves_true.get_twammReserve0(), token0.decimals)
+  pair.twammReserve1 = convertTokenToDecimal(reserves_true.get_twammReserve1(), token1.decimals)
 
   if (pair.reserve1.notEqual(BIG_DECIMAL_ZERO)) {
     pair.token0Price = pair.reserve0.div(pair.reserve1)

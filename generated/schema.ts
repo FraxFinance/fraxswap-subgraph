@@ -973,6 +973,24 @@ export class Pair extends Entity {
     this.set("reserve1", Value.fromBigDecimal(value));
   }
 
+  get twammReserve0(): BigDecimal {
+    let value = this.get("twammReserve0");
+    return value!.toBigDecimal();
+  }
+
+  set twammReserve0(value: BigDecimal) {
+    this.set("twammReserve0", Value.fromBigDecimal(value));
+  }
+
+  get twammReserve1(): BigDecimal {
+    let value = this.get("twammReserve1");
+    return value!.toBigDecimal();
+  }
+
+  set twammReserve1(value: BigDecimal) {
+    this.set("twammReserve1", Value.fromBigDecimal(value));
+  }
+
   get totalSupply(): BigDecimal {
     let value = this.get("totalSupply");
     return value!.toBigDecimal();
@@ -1230,6 +1248,24 @@ export class PairHourData extends Entity {
     this.set("reserve1", Value.fromBigDecimal(value));
   }
 
+  get twammReserve0(): BigDecimal {
+    let value = this.get("twammReserve0");
+    return value!.toBigDecimal();
+  }
+
+  set twammReserve0(value: BigDecimal) {
+    this.set("twammReserve0", Value.fromBigDecimal(value));
+  }
+
+  get twammReserve1(): BigDecimal {
+    let value = this.get("twammReserve1");
+    return value!.toBigDecimal();
+  }
+
+  set twammReserve1(value: BigDecimal) {
+    this.set("twammReserve1", Value.fromBigDecimal(value));
+  }
+
   get reserveUSD(): BigDecimal {
     let value = this.get("reserveUSD");
     return value!.toBigDecimal();
@@ -1359,6 +1395,24 @@ export class PairDayData extends Entity {
 
   set reserve1(value: BigDecimal) {
     this.set("reserve1", Value.fromBigDecimal(value));
+  }
+
+  get twammReserve0(): BigDecimal {
+    let value = this.get("twammReserve0");
+    return value!.toBigDecimal();
+  }
+
+  set twammReserve0(value: BigDecimal) {
+    this.set("twammReserve0", Value.fromBigDecimal(value));
+  }
+
+  get twammReserve1(): BigDecimal {
+    let value = this.get("twammReserve1");
+    return value!.toBigDecimal();
+  }
+
+  set twammReserve1(value: BigDecimal) {
+    this.set("twammReserve1", Value.fromBigDecimal(value));
   }
 
   get totalSupply(): BigDecimal {
@@ -1627,6 +1681,24 @@ export class LiquidityPositionSnapshot extends Entity {
 
   set reserve1(value: BigDecimal) {
     this.set("reserve1", Value.fromBigDecimal(value));
+  }
+
+  get twammReserve0(): BigDecimal {
+    let value = this.get("twammReserve0");
+    return value!.toBigDecimal();
+  }
+
+  set twammReserve0(value: BigDecimal) {
+    this.set("twammReserve0", Value.fromBigDecimal(value));
+  }
+
+  get twammReserve1(): BigDecimal {
+    let value = this.get("twammReserve1");
+    return value!.toBigDecimal();
+  }
+
+  set twammReserve1(value: BigDecimal) {
+    this.set("twammReserve1", Value.fromBigDecimal(value));
   }
 
   get reserveUSD(): BigDecimal {
@@ -2640,6 +2712,24 @@ export class Sync extends Entity {
 
   set reserve1(value: BigInt) {
     this.set("reserve1", Value.fromBigInt(value));
+  }
+
+  get twammReserve0(): BigDecimal {
+    let value = this.get("twammReserve0");
+    return value!.toBigDecimal();
+  }
+
+  set twammReserve0(value: BigDecimal) {
+    this.set("twammReserve0", Value.fromBigDecimal(value));
+  }
+
+  get twammReserve1(): BigDecimal {
+    let value = this.get("twammReserve1");
+    return value!.toBigDecimal();
+  }
+
+  set twammReserve1(value: BigDecimal) {
+    this.set("twammReserve1", Value.fromBigDecimal(value));
   }
 }
 

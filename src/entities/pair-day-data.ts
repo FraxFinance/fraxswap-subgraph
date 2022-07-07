@@ -32,6 +32,8 @@ export function updatePairDayData(event: ethereum.Event): PairDayData {
   pairDayData.totalSupply = pair.totalSupply
   pairDayData.reserve0 = pair.reserve0
   pairDayData.reserve1 = pair.reserve1
+  pairDayData.twammReserve0 = pair.twammReserve0
+  pairDayData.twammReserve1 = pair.twammReserve1
   pairDayData.reserveUSD = pair.reserveUSD
   pairDayData.txCount = pairDayData.txCount.plus(BigInt.fromI32(1))
   pairDayData.save()
