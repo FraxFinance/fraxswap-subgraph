@@ -1,8 +1,11 @@
 {
   "extends": "@graphprotocol/graph-ts/types/tsconfig.base.json",
-  "include": ["src"],
+  "include": ["src", "tests"],
 	"compilerOptions": {
     "strictNullChecks": false,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "strict": false,
+    "noImplicitAny": false,
+    "checkJs": false
 	},
 }

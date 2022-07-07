@@ -30,6 +30,8 @@ export function createLiquidityPositionSnapshot(position: LiquidityPosition, blo
   snapshot.token1PriceUSD = token1.derivedETH.times(bundle.ethPrice)
   snapshot.reserve0 = pair.reserve0
   snapshot.reserve1 = pair.reserve1
+  snapshot.twammReserve0 = pair.twammReserve0
+  snapshot.twammReserve1 = pair.twammReserve1
   snapshot.reserveUSD = pair.reserveUSD
   snapshot.liquidityTokenTotalSupply = pair.totalSupply
   snapshot.liquidityTokenBalance = position.liquidityTokenBalance

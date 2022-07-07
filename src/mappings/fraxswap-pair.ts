@@ -1,5 +1,5 @@
 import { ADDRESS_ZERO, BIG_DECIMAL_ZERO, MINIMUM_USD_THRESHOLD_NEW_PAIRS, WHITELIST } from 'const'
-import { Address, BigDecimal, BigInt, dataSource, log, store, ethereum } from '@graphprotocol/graph-ts'
+import { Address, Bytes, BigDecimal, BigInt, dataSource, log, store, ethereum } from '@graphprotocol/graph-ts'
 import { Burn, Mint, Pair, Swap, Token, Transaction } from '../../generated/schema'
 import {
   Burn as BurnEvent,
@@ -317,8 +317,17 @@ export function onSync(event: SyncEvent): void {
   token0.liquidity = token0.liquidity.minus(pair.reserve0)
   token1.liquidity = token1.liquidity.minus(pair.reserve1)
 
-  pair.reserve0 = convertTokenToDecimal(event.params.reserve0, token0.decimals)
-  pair.reserve1 = convertTokenToDecimal(event.params.reserve1, token1.decimals)
+  // Fetch reserves, accounting for outstanding TWAMMs
+  const pair_contract = PairContract.bind(event.address)
+  const reserves_true = pair_contract.getReserveAfterTwamm(event.block.timestamp)
+  const reserve0_true = reserves_true.get_reserve0()
+  const reserve1_true = reserves_true.get_reserve1()
+
+  // Set to the true reserve values, accounting for outstanding TWAMMs
+  pair.reserve0 = convertTokenToDecimal(reserve0_true, token0.decimals)
+  pair.reserve1 = convertTokenToDecimal(reserve1_true, token1.decimals)
+  pair.twammReserve0 = convertTokenToDecimal(reserves_true.get_twammReserve0(), token0.decimals)
+  pair.twammReserve1 = convertTokenToDecimal(reserves_true.get_twammReserve1(), token1.decimals)
 
   if (pair.reserve1.notEqual(BIG_DECIMAL_ZERO)) {
     pair.token0Price = pair.reserve0.div(pair.reserve1)
@@ -434,8 +443,9 @@ export function onMint(event: MintEvent): void {
   mint.amountUSD = amountTotalUSD as BigDecimal
   mint.save()
 
+
   // create liquidity position
-  const liquidityPosition = createLiquidityPosition(mint.to as Address, event.address, event.block)
+  const liquidityPosition = createLiquidityPosition(Address.fromBytes(mint.to), event.address, event.block)
 
   // create liquidity position snapshot
   createLiquidityPositionSnapshot(liquidityPosition, event.block)
@@ -536,7 +546,8 @@ export function onBurn(event: BurnEvent): void {
   burn.save()
 
   // update the LP position
-  const liquidityPosition = createLiquidityPosition(burn.sender as Address, event.address, event.block)
+  const burnSender = Address.fromBytes(burn.sender as Bytes)
+  const liquidityPosition = createLiquidityPosition(burnSender, event.address, event.block)
   createLiquidityPositionSnapshot(liquidityPosition, event.block)
 
   // update day data

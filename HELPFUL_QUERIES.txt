@@ -1,0 +1,12 @@
+{
+  pairs(first: 30) {
+    token0 {
+      symbol
+    }
+    token1 {
+      symbol
+    }
+    token0Price
+    token1Price
+  }
+}

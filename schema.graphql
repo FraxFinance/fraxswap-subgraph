@@ -229,6 +229,9 @@ type Pair @entity {
 
   reserve0: BigDecimal!
   reserve1: BigDecimal!
+  twammReserve0: BigDecimal!
+  twammReserve1: BigDecimal!
+
   totalSupply: BigDecimal!
 
   # derived liquidity
@@ -292,6 +295,8 @@ type PairHourData @entity {
   # reserves
   reserve0: BigDecimal!
   reserve1: BigDecimal!
+  twammReserve0: BigDecimal!
+  twammReserve1: BigDecimal!
 
   # derived liquidity
   reserveUSD: BigDecimal!
@@ -327,6 +332,8 @@ type PairDayData @entity {
   # reserves
   reserve0: BigDecimal!
   reserve1: BigDecimal!
+  twammReserve0: BigDecimal!
+  twammReserve1: BigDecimal!
 
   # total supply for LP historical returns
   totalSupply: BigDecimal!
@@ -368,6 +375,8 @@ type LiquidityPositionSnapshot @entity {
   token1PriceUSD: BigDecimal! # snapshot of token1 price
   reserve0: BigDecimal! # snapshot of pair token0 reserves
   reserve1: BigDecimal! # snapshot of pair token1 reserves
+  twammReserve0: BigDecimal! # snapshot of pair token0 TWAMM reserves
+  twammReserve1: BigDecimal! # snapshot of pair token1 TWAMM reserves
   reserveUSD: BigDecimal! # snapshot of pair reserves in USD
   liquidityTokenTotalSupply: BigDecimal! # snapshot of pool token supply
   # snapshot of users pool token balance
@@ -497,6 +506,8 @@ type Sync @entity {
   id: ID!
   reserve0: BigInt! # uint112
   reserve1: BigInt! # uint112
+  twammReserve0: BigDecimal!
+  twammReserve1: BigDecimal!
 }
 
 type Transfer @entity {

@@ -32,13 +32,13 @@ export function getUSDRate(token: Address, block: ethereum.Block): BigDecimal {
 
     const pair = PairContract.bind(address)
 
-    const reserves = pair.getReserves()
+    const reserves = pair.getReserveAfterTwamm(block.timestamp)
 
-    const reserve0 = reserves.value0.toBigDecimal().times(BIG_DECIMAL_1E18)
+    const reserve0 = reserves.value0.toBigDecimal()
 
-    const reserve1 = reserves.value1.toBigDecimal().times(BIG_DECIMAL_1E18)
+    const reserve1 = reserves.value1.toBigDecimal()
 
-    const ethPriceUSD = reserve1.div(reserve0).div(BIG_DECIMAL_1E6).times(BIG_DECIMAL_1E18)
+    const ethPriceUSD = reserve1.div(reserve0)
 
     return ethPriceUSD.times(tokenPriceETH)
   }
@@ -66,7 +66,7 @@ export function getEthRate(token: Address, block: ethereum.Block): BigDecimal {
 
     const pair = PairContract.bind(address)
 
-    const reserves = pair.getReserves()
+    const reserves = pair.getReserveAfterTwamm(block.timestamp)
 
     eth_price =
       pair.token0() == WETH_ADDRESS
@@ -89,7 +89,7 @@ export function getFxsPrice(block: ethereum.Block): BigDecimal {
   else {
     // Else get price from either uni or sushi usdt pair depending on space-time
     const pair = PairContract.bind(FRAX_FXS_PAIR_ADDRESS)
-    const reserves = pair.getReserves()
+    const reserves = pair.getReserveAfterTwamm(block.timestamp)
 
     fxs_price =
       pair.token0() == FXS_ADDRESS

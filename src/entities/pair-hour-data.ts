@@ -29,6 +29,8 @@ export function updatePairHourData(event: ethereum.Event): PairHourData {
 
   pairHourData.reserve0 = pair.reserve0
   pairHourData.reserve1 = pair.reserve1
+  pairHourData.twammReserve0 = pair.twammReserve0
+  pairHourData.twammReserve1 = pair.twammReserve1
   pairHourData.reserveUSD = pair.reserveUSD
   pairHourData.txCount = pairHourData.txCount.plus(BigInt.fromI32(1))
 
